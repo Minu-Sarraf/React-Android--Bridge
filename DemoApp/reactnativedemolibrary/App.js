@@ -29,6 +29,7 @@ import SelectToPair from './src/pages/SelectToPair';
 import Tryagain from './src/pages/Tryagain';
 import useListenerState from './src/utils/useListenerState';
 import BleModule from './src/utils/BleModule';
+import TestConnectNative from './src/utils/TestConnectNative';
 
 const BluetoothManager = new BleModule();
 
@@ -122,7 +123,8 @@ const BluetoothComponent = () => {
     }
     // if( isGrip == 1 && grip > 0 )
     const newgrips = parseFloat(grip * 2.2).toFixed(1);
-    console.log('checking pressure kG: ', grip, '    lb:   ', newgrips);
+    TestConnectNative.sendMessage(newgrips);
+    // console.log('checking pressure kG: ', grip, '    lb:   ', newgrips);
   };
   const handleStopScan = args => {
     const data = dataRef.current;
@@ -175,7 +177,6 @@ const BluetoothComponent = () => {
       );
       console.log('checking the location permission', value);
       if (!value) {
-        // PermissionsAndroid.request()
         try {
           const granted = PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
@@ -352,52 +353,52 @@ const BluetoothComponent = () => {
   //   console.log('checking the data', data);
   return (
     <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <View style={styles.content}>
-            {/* {!init ? <ActivityIndicator /> : <InitPage />} */}
+      <StatusBar
+        backgroundColor="#F39A78"
+        barStyle="light-content"
+        hidden={true}
+      />
+      <SafeAreaView style={{flex: 1, backgroundColor: '#F39A78'}}>
+        <View style={styles.content}>
+          {/* {!init ? <ActivityIndicator /> : <InitPage />} */}
 
-            {show === 1 && <InitPage />}
-            {show === 4 && <Tryagain retry={retry} />}
-            {show === 2 && (
-              <SelectToPair
-                data={dataRef.current}
-                peripheralId={peripheralIdRef.current}
-                retry={retry}
-                select={select}
-                connect={connect}
-              />
-            )}
-            {show == 3 && (
-              <View style={styles.open}>
-                <View style={styles.openChild}>
-                  <Text style={styles.title}>PAIR MY</Text>
-                  <Image
-                    style={{width: 100, height: 25}}
-                    source={require('./src/img/logo.png')}
-                    resizeMode="cover"
-                  />
-                </View>
+          {show === 1 && <InitPage />}
+          {show === 4 && <Tryagain retry={retry} />}
+          {show === 2 && (
+            <SelectToPair
+              data={dataRef.current}
+              peripheralId={peripheralIdRef.current}
+              retry={retry}
+              select={select}
+              connect={connect}
+            />
+          )}
+          {show == 3 && (
+            <View style={styles.open}>
+              <View style={styles.openChild}>
+                <Text style={styles.title}>PAIR MY</Text>
+                <Image
+                  style={{width: 100, height: 25}}
+                  source={require('./src/img/logo.png')}
+                  resizeMode="cover"
+                />
+              </View>
 
-                <View style={styles.openChild1}>
-                  <Text style={styles.body}>Enable Bluetooth</Text>
-                  <Text style={styles.body}>to begin pairing</Text>
-                  <Text style={styles.body}>your device</Text>
-                </View>
+              <View style={styles.openChild1}>
+                <Text style={styles.body}>Enable Bluetooth</Text>
+                <Text style={styles.body}>to begin pairing</Text>
+                <Text style={styles.body}>your device</Text>
               </View>
-            )}
-            {show === 5 && (
-              <View style={styles.open}>
-                <View style={styles.bodyWarp}>
-                  <Text style={styles.body}>Pairing...</Text>
-                </View>
+            </View>
+          )}
+          {show === 5 && (
+            <View style={styles.open}>
+              <View style={styles.bodyWarp}>
+                <Text style={styles.body}>Pairing...</Text>
               </View>
-            )}
-          </View>
-        </ScrollView>
+            </View>
+          )}
+        </View>
       </SafeAreaView>
     </>
   );

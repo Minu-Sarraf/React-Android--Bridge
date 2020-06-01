@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 
 import com.contoso.reactnativedemolibrary.internal.ActivityLifeCycleHandler;
@@ -69,7 +68,7 @@ public final class ReactNativeDemoLibrary {
      * @exception IllegalArgumentException if {@code activity == null} or this method has previously
      * been called with a different value for {@code useDeveloperSupport}.
      */
-    public static View createHelloWorldView(@NonNull Activity activity, boolean useDeveloperSupport) {
+    public static View createHelloWorldView(@NonNull Activity activity, boolean useDeveloperSupport, GripInterface gripInterface) {
         //noinspection ConstantConditions
         if (activity == null) {
             throw new IllegalArgumentException("Null activity passed to ReactNativeDemoLibrary.start");
@@ -87,9 +86,9 @@ public final class ReactNativeDemoLibrary {
             reactInstanceManager = ReactInstanceManager.builder()
                     .setApplication(activity.getApplication())
                     .setBundleAssetName("index.android.bundle")
-                    .setJSMainModulePath("index.android")
+                    .setJSMainModulePath("index")
                     .addPackage(new MainReactPackage())
-                    .addPackage(new DemoReactPackage())
+                    .addPackage(new DemoReactPackage(gripInterface))
                     .setUseDeveloperSupport(useDeveloperSupport)
                     .setInitialLifecycleState(LifecycleState.BEFORE_RESUME)
                     .build();
@@ -100,7 +99,7 @@ public final class ReactNativeDemoLibrary {
 
         ReactRootView reactRootView = new ReactRootView(activity);
 
-        reactRootView.startReactApplication(reactInstanceManager, "HelloWorld");
+        reactRootView.startReactApplication(reactInstanceManager, "bluetoothPackage",null);
 
         return reactRootView;
     }
